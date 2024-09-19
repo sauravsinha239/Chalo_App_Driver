@@ -1,0 +1,64 @@
+import 'package:drivers/TabPage/AccountsTab.dart';
+import 'package:drivers/TabPage/EarningTab.dart';
+import 'package:drivers/TabPage/HomeTab.dart';
+import 'package:drivers/TabPage/RatingTab.dart';
+import 'package:flutter/material.dart';
+
+class MainPage extends StatefulWidget{
+  const MainPage({super.key});
+
+  @override
+  State<MainPage> createState() => _MainPageState();
+}
+
+class _MainPageState extends State<MainPage> with SingleTickerProviderStateMixin {
+  TabController? tabController;
+  int selectIndex = 0;
+  onItemClicked(int index){
+    setState(() {
+      selectIndex=index;
+      tabController!.index=selectIndex;
+    });
+  }
+  @override
+  void initState() {
+    super.initState();
+    tabController = TabController(length: 4, vsync: this);
+  }
+  @override
+
+  Widget build(BuildContext context) {
+    bool darktheme = MediaQuery.of(context).platformBrightness == Brightness.dark;
+    return Scaffold(
+      body: TabBarView(
+        physics: NeverScrollableScrollPhysics(),
+        controller: tabController,
+        children: [
+           Hometab(),
+          // Earningtab(),
+          // Ratingtab(),
+          // Accountstab(),
+        ],
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        items:[
+          BottomNavigationBarItem(icon :Icon(Icons.home),label: "Home"),
+          BottomNavigationBarItem(icon :Icon(Icons.credit_card),label: "Earnings"),
+          BottomNavigationBarItem(icon :Icon(Icons.star_border),label: "Ratings"),
+          BottomNavigationBarItem(icon :Icon(Icons.person),label: "Accounts"),
+
+        ],
+        unselectedItemColor: darktheme? Colors.black: Colors.white,
+        selectedItemColor: darktheme ? Colors.yellow: Colors.red,
+        backgroundColor: darktheme? Colors.grey: Colors.brown,
+
+        type:BottomNavigationBarType.fixed,
+        selectedLabelStyle: TextStyle(fontSize: 14),
+        showUnselectedLabels: true,
+        currentIndex: selectIndex,
+        onTap: onItemClicked,
+      ),
+    );
+
+  }
+}
