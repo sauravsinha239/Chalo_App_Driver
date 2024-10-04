@@ -1,6 +1,10 @@
 import 'dart:async';
 
+import 'package:drivers/pushNotification/notificationDialogBox.dart';
+import 'package:drivers/screen/main_page.dart';
 import 'package:drivers/splash_screen/splash.dart';
+import 'package:drivers/widgets/fareAmountCollectionDialog.dart';
+import 'package:drivers/widgets/getDriverData.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:provider/provider.dart';
@@ -17,7 +21,6 @@ Future <void> main() async{
   Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform
   );
-
 
   runApp(const MyApp());
 }
@@ -37,8 +40,7 @@ class MyApp extends StatelessWidget {
         theme: MyThemes.lightTheme,
         darkTheme: MyThemes.darkTheme,
         debugShowCheckedModeBanner: false,
-        home: const Splash(
-        ),
+        home: Splash(),
       ),
     );
   }

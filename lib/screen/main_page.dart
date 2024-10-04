@@ -1,9 +1,10 @@
+import 'dart:async';
+
 import 'package:drivers/TabPage/AccountsTab.dart';
 import 'package:drivers/TabPage/EarningTab.dart';
 import 'package:drivers/TabPage/HomeTab.dart';
 import 'package:drivers/TabPage/RatingTab.dart';
 import 'package:flutter/material.dart';
-
 class MainPage extends StatefulWidget{
   const MainPage({super.key});
 
@@ -20,24 +21,30 @@ class _MainPageState extends State<MainPage> with SingleTickerProviderStateMixin
       tabController!.index=selectIndex;
     });
   }
+
+
   @override
   void initState() {
     super.initState();
+
     tabController = TabController(length: 4, vsync: this);
+
   }
+
+
   @override
 
   Widget build(BuildContext context) {
-    bool darktheme = MediaQuery.of(context).platformBrightness == Brightness.dark;
+    bool darkTheme = MediaQuery.of(context).platformBrightness == Brightness.dark;
     return Scaffold(
       body: TabBarView(
         physics: NeverScrollableScrollPhysics(),
         controller: tabController,
         children: [
            Hometab(),
-          // Earningtab(),
-          // Ratingtab(),
-          // Accountstab(),
+           EarningTab(),
+           RatingTab(),
+           AccountsTab(),
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
@@ -48,9 +55,9 @@ class _MainPageState extends State<MainPage> with SingleTickerProviderStateMixin
           BottomNavigationBarItem(icon :Icon(Icons.person),label: "Accounts"),
 
         ],
-        unselectedItemColor: darktheme? Colors.black: Colors.white,
-        selectedItemColor: darktheme ? Colors.yellow: Colors.red,
-        backgroundColor: darktheme? Colors.grey: Colors.brown,
+        unselectedItemColor: darkTheme? Colors.black: Colors.white,
+        selectedItemColor: darkTheme ? Colors.yellow: Colors.red,
+        backgroundColor: darkTheme? Colors.grey: Colors.brown,
 
         type:BottomNavigationBarType.fixed,
         selectedLabelStyle: TextStyle(fontSize: 14),

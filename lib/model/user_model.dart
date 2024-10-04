@@ -18,7 +18,7 @@ class  UserModel{
     this.address
 
 });
-  UserModel.fromSnapshot( DataSnapshot snap){
+  UserModel.fromSnapshot(DataSnapshot snap){
 
     if (snap.value != null && snap.value is Map) {
 
@@ -31,9 +31,7 @@ class  UserModel{
     }
     else{
       log("Invalid snapshot data: ${snap.value}");
-
     }
-
 
   }
 }

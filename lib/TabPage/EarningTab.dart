@@ -1,16 +1,31 @@
 import 'package:flutter/material.dart';
 
-class Earningtab extends StatefulWidget{
-  const Earningtab({super.key});
+class EarningTab extends StatefulWidget{
+  const EarningTab({super.key});
 
   @override
-  State<Earningtab> createState() => _EarningtabState();
+  State<EarningTab> createState() => _EarningTabState();
 }
 
-class _EarningtabState extends State<Earningtab> {
+class _EarningTabState extends State<EarningTab> {
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
-    throw UnimplementedError();
+    return Scaffold(appBar: AppBar(
+      title: Text("Earning Tab",
+        style: TextStyle(
+          color: Colors.blue,
+          fontSize: 14,
+          fontWeight: FontWeight.bold,
+        ),
+
+    ),
+    ),
+      body: Container(
+        child: Text(
+          "Hello",
+        ),
+      ),
+    );
+ 
   }
 }

@@ -1,10 +1,11 @@
 
-import 'package:drivers/screen/carInfoScrenn.dart';
+import 'package:drivers/screen/vehicleScreenInformation.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 import '../global/global.dart';
 import 'forget.dart';
@@ -37,20 +38,20 @@ class _register_screenState extends State<register_screen> {
         email: EmailTextEditingControler.text.trim(),
         password: PasswordTextEditingControler.text.trim(),
       ).then((auth) async {
-        currentuser = auth.user;
-        if (currentuser != null) {
+        currentUser = auth.user;
+        if (currentUser != null) {
           Map UserMap = {
-            "id": currentuser!.uid,
+            "id": currentUser!.uid,
             "name": NameTextEditingControler.text.trim(),
             "email": EmailTextEditingControler.text.trim(),
             "address": AddressTextEditingControler.text.trim(),
             "phone": PhoneTextEditingControler.text.trim(),
           };
           DatabaseReference UserRef = FirebaseDatabase.instance.ref().child("drivers");
-          UserRef.child(currentuser!.uid).set(UserMap);
+          UserRef.child(currentUser!.uid).set(UserMap);
         }
         await Fluttertoast.showToast(msg: "Successfully Registerd , Login now");
-        Navigator.push(context, MaterialPageRoute(builder: (c) => const carInfoScreen()));
+        Navigator.push(context, MaterialPageRoute(builder: (c) => const VehicleScrennInformation()));
       }).catchError((errorMessage) {
         Fluttertoast.showToast(msg: "User already registered \n Please login" );
       });
@@ -76,7 +77,7 @@ class _register_screenState extends State<register_screen> {
             Text(
               'Register',
               textAlign: TextAlign.center,
-              style: TextStyle(
+              style: GoogleFonts.courierPrime(
                 color: darktheme ? Colors.amber.shade400:Colors.red,
                 fontSize: 30,
                 fontWeight: FontWeight.w600,
@@ -101,7 +102,7 @@ class _register_screenState extends State<register_screen> {
                           ],
                             decoration: InputDecoration(
                               hintText: "Name",
-                              hintStyle: const TextStyle(
+                              hintStyle: GoogleFonts.lato(
                                 color: Colors.grey,
                               ),
                               filled: true,
@@ -141,7 +142,7 @@ class _register_screenState extends State<register_screen> {
                           decoration: InputDecoration(
                               hintText: "Email",
 
-                              hintStyle: const TextStyle(
+                              hintStyle: GoogleFonts.lato(
                                 color: Colors.grey,
 
                               ),
@@ -187,7 +188,7 @@ class _register_screenState extends State<register_screen> {
                            ),
                            decoration: InputDecoration(
                              hintText: "Phone Number",
-                             hintStyle: const TextStyle(
+                             hintStyle: GoogleFonts.lato(
                                color: Colors.grey,
                              ),
                              filled: true,
@@ -214,7 +215,7 @@ class _register_screenState extends State<register_screen> {
                           decoration: InputDecoration(
                               hintText: "Enter your address",
 
-                              hintStyle: const TextStyle(
+                              hintStyle: GoogleFonts.lato(
                                 color: Colors.grey,
 
                               ),
@@ -258,7 +259,7 @@ class _register_screenState extends State<register_screen> {
                           decoration: InputDecoration(
                             hintText: "Enter Password",
 
-                            hintStyle: const TextStyle(
+                            hintStyle: GoogleFonts.lato(
                               color: Colors.grey,
                             ),
                             filled: true,
@@ -312,7 +313,7 @@ class _register_screenState extends State<register_screen> {
                           decoration: InputDecoration(
                             hintText: "Confirm Password",
 
-                            hintStyle: const TextStyle(
+                            hintStyle: GoogleFonts.lato(
                               color: Colors.grey,
                             ),
                             filled: true,
@@ -388,7 +389,7 @@ class _register_screenState extends State<register_screen> {
                           },
                           child: Text(
                             'Forget Password',
-                            style: TextStyle(
+                            style: GoogleFonts.lato(
                               color: darktheme ? Colors.yellowAccent : Colors.red,
                               fontSize: 20,
                             ),
@@ -412,7 +413,7 @@ class _register_screenState extends State<register_screen> {
                               },
                               child: Text(
                                 "Sign in",
-                                style: TextStyle(
+                                style: GoogleFonts.lato(
                                   fontSize: 15,
                                   color: darktheme ? Colors.grey :Colors.grey,
                                 ),

@@ -1,16 +1,31 @@
 import 'package:flutter/material.dart';
 
-class Ratingtab extends StatefulWidget{
-  const Ratingtab({super.key});
+class RatingTab extends StatefulWidget{
+  const RatingTab({super.key});
 
   @override
-  State<Ratingtab> createState() => _RatingtabState();
+  State<RatingTab> createState() => _RatingTabState();
 }
 
-class _RatingtabState extends State<Ratingtab> {
+class _RatingTabState extends State<RatingTab> {
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
-    throw UnimplementedError();
+    return Scaffold(appBar: AppBar(
+      title: Text("Rating Tab",
+        style: TextStyle(
+          color: Colors.blue,
+          fontSize: 14,
+          fontWeight: FontWeight.bold,
+        ),
+
+      ),
+    ),
+      body: Container(
+        child: Text(
+          "Hello",
+        ),
+      ),
+    );
+
   }
 }

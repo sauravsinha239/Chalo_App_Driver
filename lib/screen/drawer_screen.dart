@@ -64,7 +64,7 @@ class _drawerScreenState extends State<drawerScreen> {
                           Flexible(
                             fit: FlexFit.loose,
                             child: Text(
-                              UserModelCurrentInfo?.name ?? 'Unknown',
+                              userModelCurrentInfo?.name ?? 'Unknown',
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize:20,
@@ -81,14 +81,14 @@ class _drawerScreenState extends State<drawerScreen> {
                     GestureDetector(
                       onTap: () async{
                           Navigator.push(context, MaterialPageRoute(builder: (c)=>ProfileScreen()));
-                          currentuser = firebaseAuth.currentUser;
+                          currentUser = firebaseAuth.currentUser;
                           DatabaseReference userRef = FirebaseDatabase.instance
                               .ref()
                               .child("drivers")
-                              .child(currentuser!.uid);
+                              .child(currentUser!.uid);
                           DatabaseEvent event = await userRef.once();
                           DataSnapshot snapshot = event.snapshot;
-                          UserModelCurrentInfo = UserModel.fromSnapshot(snapshot);
+                          userModelCurrentInfo = UserModel.fromSnapshot(snapshot);
                       },
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.start,

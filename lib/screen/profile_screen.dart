@@ -55,7 +55,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   }).then((value){
                     // change state
                     setState(() {
-                      UserModelCurrentInfo!.name = nameTextEditor.text.trim();
+                      userModelCurrentInfo!.name = nameTextEditor.text.trim();
                     });
                     nameTextEditor.clear();
                     Fluttertoast.showToast(msg: "Modified Succesfully.");
@@ -104,7 +104,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     "phone" : phoneTextEditor.text.trim(),
                   }).then((value){
                     setState(() {
-                      UserModelCurrentInfo!.phone = phoneTextEditor.text.trim();
+                      userModelCurrentInfo!.phone = phoneTextEditor.text.trim();
                     });
                  phoneTextEditor.clear();
                     Fluttertoast.showToast(msg: "Modified Succesfully.");
@@ -154,7 +154,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     "address" : addressTextEditor.text.trim(),
                   }).then((value){
                     setState(() {
-                      UserModelCurrentInfo!.address = addressTextEditor.text.trim();
+                      userModelCurrentInfo!.address = addressTextEditor.text.trim();
                     });
                     addressTextEditor.clear();
                     Fluttertoast.showToast(msg: "Modified Succesfully.");
@@ -219,7 +219,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text("${UserModelCurrentInfo!.name!}",
+                    Text("${userModelCurrentInfo!.name!}",
                     style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
@@ -228,7 +228,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ),
                     IconButton(
                         onPressed: (){
-                          showUserNameDialogAlert(context, UserModelCurrentInfo!.name!);
+                          showUserNameDialogAlert(context, userModelCurrentInfo!.name!);
                         },
                         icon: Icon(
                           Icons.edit, color: Colors.green,
@@ -244,7 +244,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text("${UserModelCurrentInfo!.phone!}",
+                    Text("${userModelCurrentInfo!.phone!}",
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
@@ -253,7 +253,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ),
                     IconButton(
                       onPressed: (){
-                        showUserPhoneDialogAlert(context, UserModelCurrentInfo!.phone!);
+                        showUserPhoneDialogAlert(context, userModelCurrentInfo!.phone!);
                       },
                       icon: Icon(
                         Icons.edit, color: Colors.green,
@@ -268,7 +268,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text("${UserModelCurrentInfo!.address!}",
+                    Text("${userModelCurrentInfo!.address!}",
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
@@ -278,7 +278,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     IconButton(
                       onPressed: (){
 
-                          showUserAddressDialogAlert(context, UserModelCurrentInfo!.address!);
+                          showUserAddressDialogAlert(context, userModelCurrentInfo!.address!);
                       },
                       icon: Icon(
                         Icons.edit, color: Colors.green,
@@ -289,7 +289,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 Divider(
                   thickness: 1,
                 ),
-                Text("${UserModelCurrentInfo!.email!}",
+                Text("${userModelCurrentInfo!.email!}",
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,

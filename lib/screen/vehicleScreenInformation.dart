@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:drivers/Theme_provider/theme_provider.dart';
 import 'package:drivers/infoHandler/app_info.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -10,33 +12,38 @@ import '../global/global.dart';
 import 'forget.dart';
 import 'login_screen.dart';
 
-class carInfoScreen extends StatefulWidget{
-  const carInfoScreen({super.key});
+class VehicleScrennInformation extends StatefulWidget{
+  const VehicleScrennInformation({super.key});
 
   @override
-  State<carInfoScreen> createState() => _carInfoScreenState();
+  State<VehicleScrennInformation> createState() => _VehicleScrennInformationState();
 }
 
-class _carInfoScreenState extends State<carInfoScreen> {
-  final carModelTextEdit= TextEditingController();
-  final carNumberTextEdit= TextEditingController();
-  final carColorTextEdit= TextEditingController();
-  List<String> carTypes = ["Car","Cng", "Bike" ];
-  String? selectedCarType;
+class _VehicleScrennInformationState extends State<VehicleScrennInformation> {
+  final vehicleModelTextEdit= TextEditingController();
+  final vehicleNumberTextEdit= TextEditingController();
+  final vehicleColorTextEdit= TextEditingController();
+
+  List<String> vehicleTypes= ["Car","Cng", "Bike" ];
+
+  String? selectedVehicleType;
+
   final _formkey =GlobalKey<FormState>();
   _Submit() async {
     if(_formkey.currentState!.validate()) {
       Map driverCarInfoMap = {
-        "Vehicle_model": carModelTextEdit.text.trim(),
-        "Vehicle_color": carColorTextEdit.text.trim(),
-        "Vehicle_number": carNumberTextEdit.text.trim(),
-
+        "vehicleModel": vehicleModelTextEdit.text.trim(),
+        "vehicleColor": vehicleColorTextEdit.text.trim(),
+        "vehicleNumber": vehicleNumberTextEdit.text.trim(),
+        "vehicleType": selectedVehicleType?.toLowerCase(),
       };
 
       DatabaseReference UserRef = FirebaseDatabase.instance.ref().child(
           "drivers");
-      UserRef.child(currentuser!.uid).child("Vehicle_details").set(
+      UserRef.child(currentUser!.uid).child("vehicleDetails").set(
           driverCarInfoMap);
+      print("vehicle types log ${vehicleTypes}");
+      print("Selected vehicle types ${selectedVehicleType}");
       await Fluttertoast.showToast(msg: "Vehicle Details Saved , Login now");
       Navigator.push(
           context, MaterialPageRoute(builder: (c) => const LoginScreen()));
@@ -65,7 +72,7 @@ class _carInfoScreenState extends State<carInfoScreen> {
                Image.asset(darktheme ? 'images/citydark.jpg' : 'images/city.jpg'),
                SizedBox(height: 20,),
        Text(
-         'Input Vehicle Details',
+         'Enter Vehicle Details',
          textAlign: TextAlign.center,
          style: TextStyle(
            color: darktheme ? Colors.amber.shade400:Colors.red,
@@ -118,7 +125,7 @@ class _carInfoScreenState extends State<carInfoScreen> {
                                return null;
                              },
                              onChanged: (Text)=>setState(() {
-                               carModelTextEdit.text=Text;
+                               vehicleModelTextEdit.text=Text;
                              }),
                            ),
                            SizedBox(height: 10,),
@@ -156,7 +163,7 @@ class _carInfoScreenState extends State<carInfoScreen> {
                                return null;
                              },
                              onChanged: (Text)=>setState(() {
-                               carColorTextEdit.text=Text;
+                               vehicleColorTextEdit.text=Text;
                              }),
                            ),
                            SizedBox(height: 10,),
@@ -194,10 +201,11 @@ class _carInfoScreenState extends State<carInfoScreen> {
                                return null;
                              },
                              onChanged: (Text)=>setState(() {
-                               carNumberTextEdit.text=Text;
+                               vehicleNumberTextEdit.text=Text;
                              }),
                            ),
                            SizedBox(height: 10,),
+
                            DropdownButtonFormField(
                              decoration: InputDecoration(
                                hintText: "Please Chose Vehicle Types!",
@@ -207,7 +215,7 @@ class _carInfoScreenState extends State<carInfoScreen> {
                                fillColor: darktheme ? Colors.black:Colors.white,
 
                              ),
-                               items: carTypes.map((car){
+                               items: vehicleTypes.map((car){
                                  return DropdownMenuItem(
                                      child: Text( car, style: TextStyle(color: Colors.grey),
                                  ),
@@ -216,7 +224,7 @@ class _carInfoScreenState extends State<carInfoScreen> {
                                }).toList(),
                                onChanged: (newValue){
                                  setState(() {
-                                   selectedCarType=newValue.toString();
+                                   selectedVehicleType=newValue.toString();
                                  });
                                }
                            ),

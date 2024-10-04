@@ -1,6 +1,7 @@
 
 import 'dart:async';
-import 'package:drivers/screen/carInfoScrenn.dart';
+import 'package:drivers/pushNotification/notificationDialogBox.dart';
+import 'package:drivers/screen/vehicleScreenInformation.dart';
 import 'package:flutter/material.dart';
 
 import '../Assistants/assistant.dart';
@@ -22,7 +23,7 @@ class _SplashState extends State<Splash> {
       if(firebaseAuth.currentUser!=null)
         {
           firebaseAuth.currentUser!= null ? Assistants.readCurrentOnlineUserInfo(): null;
-          Navigator.pushReplacement(context, MaterialPageRoute(builder: (c)=> const MainPage()));
+          Navigator.pushReplacement(context, MaterialPageRoute(builder: (c)=> MainPage()));
         }
       else{
         Navigator.pushReplacement(context, MaterialPageRoute(builder:(c)=>const LoginScreen()));

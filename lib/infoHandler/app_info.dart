@@ -6,7 +6,7 @@ import '../model/directions.dart';
 class AppInfo extends ChangeNotifier{
   Directions? userPickUpLocation, userDropOffLocation;
   int countTotalTrips =  0;
-  //List<String> historyTripsKeyList = [];
+  List<String> historyTripsKeyList = [];
  // List<TripsHistoryModel> allTripsHistoryInformationList = [];
 
 void updatePickUpLocationAddress(Directions userPickUpAddress){
@@ -14,12 +14,10 @@ void updatePickUpLocationAddress(Directions userPickUpAddress){
   notifyListeners();
 
 }
-void updateDropOffLocationAddress(Directions userdropOffAddress){
+void updateDropOffLocationAddress(Directions userDropOffAddress){
 
-  userDropOffLocation = userdropOffAddress;
+  userDropOffLocation = userDropOffAddress;
   notifyListeners();
 }
-
-
 }
 

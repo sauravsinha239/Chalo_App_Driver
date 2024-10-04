@@ -1,16 +1,30 @@
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
-class Accountstab extends StatefulWidget{
-  const Accountstab({super.key});
+class AccountsTab extends StatefulWidget{
+  const AccountsTab({super.key});
 
   @override
-  State<Accountstab> createState() => _AccountstabState();
+  State<AccountsTab> createState() => _AccountsTabState();
 }
 
-class _AccountstabState extends State<Accountstab> {
+class _AccountsTabState extends State<AccountsTab> {
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
-    throw UnimplementedError();
+    return Scaffold(appBar: AppBar(
+      title: Text("AccountsTab",
+        style: TextStyle(
+          color: Colors.blue,
+          fontSize: 14,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+    ),
+      body: Container(
+        child: Text(
+          "Hello",
+        ),
+      ),
+    );
+
   }
 }

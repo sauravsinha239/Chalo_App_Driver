@@ -4,9 +4,11 @@ import 'dart:developer';
 import 'package:drivers/Assistants/request_assistant.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_geofire/flutter_geofire.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
+
 import '../global/global.dart';
 import '../global/map_key.dart';
 import '../infoHandler/app_info.dart';
@@ -16,11 +18,11 @@ import '../model/user_model.dart';
 
 class Assistants{
 static void readCurrentOnlineUserInfo()async{
-  currentuser = firebaseAuth.currentUser;
+  currentUser = firebaseAuth.currentUser;
 
-  if (currentuser != null) {
+  if (currentUser != null) {
 
-    DatabaseReference userRef = FirebaseDatabase.instance.ref().child("drivers").child(currentuser!.uid);
+    DatabaseReference userRef = FirebaseDatabase.instance.ref().child("drivers").child(currentUser!.uid);
 
     try {
       // Fetch the user data from the database
@@ -30,8 +32,8 @@ static void readCurrentOnlineUserInfo()async{
       // Check if the data exists
       if (snapshot.value != null) {
         // Parse the snapshot into UserModel
-        UserModelCurrentInfo = UserModel.fromSnapshot(snapshot);
-        log("User Info Loaded: ${UserModelCurrentInfo!.name}");
+        userModelCurrentInfo = UserModel.fromSnapshot(snapshot);
+        log("User Info Loaded: ${userModelCurrentInfo!.name}");
       } else {
         log("No user data found.");
       }
@@ -76,19 +78,47 @@ static Future <DirectionDetailsInfo> obtainOriginToDestinationDirectionDetails(L
   var responseDirectionApi= await RequestAssistant.receiveRequest(urlObtainOriginToDestinationDirectionDetails);
   print("Response Status is   = $responseDirectionApi");
   log("Check connection of direction Status is = $responseDirectionApi");
-  if(responseDirectionApi=="Error Occured Failed \. No Response"){
+  if(responseDirectionApi=="Error Occurred Failed \. No Response"){
     // log("Check connection of direction in if cond  $responseDirectionApi");
    // return null;
   }
-  DirectionDetailsInfo drirectionDetailsInfo =DirectionDetailsInfo();
+  DirectionDetailsInfo directionDetailsInfo =DirectionDetailsInfo();
   
-  drirectionDetailsInfo.encodePoints= responseDirectionApi["routes"][0]["overview_polyline"]["points"];
+  directionDetailsInfo.encodePoints= responseDirectionApi["routes"][0]["overview_polyline"]["points"];
 
-  drirectionDetailsInfo.distanceText= responseDirectionApi["routes"][0]["legs"][0]["distance"]["text"];
-  drirectionDetailsInfo.distanceValue= responseDirectionApi["routes"][0]["legs"][0]["distance"]["value"];
-  drirectionDetailsInfo.durationText= responseDirectionApi["routes"][0]["legs"][0]["duration"]["text"];
-  drirectionDetailsInfo.durationValue= responseDirectionApi["routes"][0]["legs"][0]["duration"]["value"];
-  return drirectionDetailsInfo;
+  directionDetailsInfo.distanceText= responseDirectionApi["routes"][0]["legs"][0]["distance"]["text"];
+  directionDetailsInfo.distanceValue= responseDirectionApi["routes"][0]["legs"][0]["distance"]["value"];
+  directionDetailsInfo.durationText= responseDirectionApi["routes"][0]["legs"][0]["duration"]["text"];
+  directionDetailsInfo.durationValue= responseDirectionApi["routes"][0]["legs"][0]["duration"]["value"];
+  return directionDetailsInfo;
 
+}
+
+static pauseLiveLocationUpdate(){
+  streamSubscriptionPosition!.pause();
+  Geofire.removeLocation(firebaseAuth.currentUser!.uid);
+}
+static double calculateFareAmountFromOriginToDestination(DirectionDetailsInfo directionDetailsInfo){
+  double timeTravelledFareAmountPerMinute =(directionDetailsInfo.durationValue! /60)*0.1;
+  double distanceTravelledFareAmountPerKilometer = (directionDetailsInfo.distanceValue! /1000)*0.1;
+  //USD
+  double totalFareAmount= timeTravelledFareAmountPerMinute + distanceTravelledFareAmountPerKilometer;
+  double localCurrencyTotalFare =totalFareAmount*107;
+  if(driverVehicleType =="bike"){
+    double resultFareAmount = ((localCurrencyTotalFare.truncate())*0.8);
+    resultFareAmount;
+  }
+  else if(driverVehicleType=="cng"){
+    double resultFareAmount = ((localCurrencyTotalFare.truncate())*1.5);
+    resultFareAmount;
+  }
+  else if(driverVehicleType=="car"){
+    double resultFareAmount = ((localCurrencyTotalFare.truncate())*2);
+    resultFareAmount;
+  }
+  else{
+    return localCurrencyTotalFare.truncate().toDouble();
+  }
+  return localCurrencyTotalFare.truncate().toDouble();
 }
 }

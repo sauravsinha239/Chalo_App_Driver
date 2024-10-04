@@ -1,11 +1,13 @@
 
 import 'package:drivers/screen/register_screen.dart';
+import 'package:drivers/widgets/getDriverData.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import '../global/global.dart';
 import '../model/user_model.dart';
@@ -41,15 +43,17 @@ class _LoginScreenState extends State<LoginScreen> {
         UserRef.child(firebaseAuth.currentUser!.uid).once().then((value) async{
           final snap = value.snapshot;
           if(snap.value!=null){
-            currentuser =auth.user;
+            currentUser =auth.user;
+            GetDriverData gt=GetDriverData();
+            await gt.readCurrentDriverInformation();
             await Fluttertoast.showToast(msg: "Successfully Logged In");
             Navigator.push(context, MaterialPageRoute(builder: (c)=>MainPage()));
             //for get current user info in drawer patch
             DatabaseReference userRef = FirebaseDatabase.instance
-                .ref().child("drivers").child(currentuser!.uid);
+                .ref().child("drivers").child(currentUser!.uid);
             DatabaseEvent event = await userRef.once();
             DataSnapshot snapshot = event.snapshot;
-            UserModelCurrentInfo = UserModel.fromSnapshot(snapshot);
+            userModelCurrentInfo = UserModel.fromSnapshot(snapshot);
             //end
 
           }
@@ -89,7 +93,7 @@ class _LoginScreenState extends State<LoginScreen> {
             Text(
               'Login Now',
               textAlign: TextAlign.center,
-              style: TextStyle(
+              style: GoogleFonts.courierPrime(
                 fontSize: 40,
                 color: darktheme ? Colors.yellowAccent : Colors.red,
                 fontWeight: FontWeight.bold,
