@@ -99,26 +99,34 @@ static pauseLiveLocationUpdate(){
   Geofire.removeLocation(firebaseAuth.currentUser!.uid);
 }
 static double calculateFareAmountFromOriginToDestination(DirectionDetailsInfo directionDetailsInfo){
-  double timeTravelledFareAmountPerMinute =(directionDetailsInfo.durationValue! /60)*0.1;
-  double distanceTravelledFareAmountPerKilometer = (directionDetailsInfo.distanceValue! /1000)*0.1;
-  //USD
-  double totalFareAmount= timeTravelledFareAmountPerMinute + distanceTravelledFareAmountPerKilometer;
-  double localCurrencyTotalFare =totalFareAmount*107;
-  if(driverVehicleType =="bike"){
-    double resultFareAmount = ((localCurrencyTotalFare.truncate())*0.8);
-    resultFareAmount;
-  }
-  else if(driverVehicleType=="cng"){
-    double resultFareAmount = ((localCurrencyTotalFare.truncate())*1.5);
-    resultFareAmount;
-  }
-  else if(driverVehicleType=="car"){
-    double resultFareAmount = ((localCurrencyTotalFare.truncate())*2);
-    resultFareAmount;
-  }
-  else{
-    return localCurrencyTotalFare.truncate().toDouble();
-  }
-  return localCurrencyTotalFare.truncate().toDouble();
+
+    // Calculate fare components based on duration and distance in minutes and kilometers
+    double timeTravelledFareAmountPerMinute = (directionDetailsInfo.durationValue! / 60) * 2.0; // 2 INR per minute
+    double distanceTravelledFareAmountPerKilometer = (directionDetailsInfo.distanceValue! / 1000) * 10.0; // 10 INR per km
+
+    // Total fare amount in INR
+    double totalFareAmount = distanceTravelledFareAmountPerKilometer+timeTravelledFareAmountPerMinute;
+
+    // Calculate fare based on vehicle type
+    double resultFareAmount;
+
+    if (driverVehicleType == "bike") {
+      resultFareAmount = (totalFareAmount * 0.8); // Discount for bikes
+    } else if (driverVehicleType == "cng") {
+      resultFareAmount = (totalFareAmount * 1.5); // Higher fare for CNG
+    } else if (driverVehicleType == "car") {
+      resultFareAmount = (totalFareAmount * 2); // Higher fare for cars
+    } else {
+      resultFareAmount = totalFareAmount; // Default case
+    }
+    // Return the fare amount rounded to two decimal places
+    return double.parse(resultFareAmount.toStringAsFixed(2));
+
+    print("Duration Value (seconds): ${directionDetailsInfo.durationValue}");
+    print("Distance Value (meters): ${directionDetailsInfo.distanceValue}");
+    print("Calculated Fare Amount: ₹${totalFareAmount}");
+    print("Final Fare Amount for ${driverVehicleType}: ₹${resultFareAmount}");
+
 }
+
 }

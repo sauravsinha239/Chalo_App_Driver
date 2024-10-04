@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:drivers/global/global.dart';
 import 'package:drivers/model/driverInfo.dart';
 import 'package:drivers/pushNotification/pushNotificationSystem.dart';
+import 'package:drivers/splash_screen/splash.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -149,7 +150,7 @@ GetDriverData gdd =GetDriverData();
                   style: TextStyle(
                    fontSize: 16,
                    fontWeight: FontWeight.bold,
-                   color: Colors.white,
+                   color: Colors.blue,
                  ),
                  ) : Icon( Icons.phonelink_ring,
                    color: darkTheme ? Colors.yellow: Colors.red,
@@ -193,8 +194,11 @@ GetDriverData gdd =GetDriverData();
     ref.onDisconnect();
     ref.remove();
     ref =null;
-    Future.delayed(const Duration(microseconds: 2000),(){
-      SystemChannels.platform.invokeMethod("SystemNavigator.pop");
+    Future.delayed(const Duration(microseconds: 8000),(){
+      Navigator.push(context, MaterialPageRoute(builder: (c)=> Splash()));
+
+
     });
+
   }
 }
