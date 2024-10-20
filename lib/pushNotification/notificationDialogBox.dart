@@ -4,6 +4,7 @@ import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:drivers/Assistants/assistant.dart';
 import 'package:drivers/global/global.dart';
 import 'package:drivers/model/userRideRequestInformaition.dart';
+import 'package:drivers/pushNotification/pushNotificationSystem.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -154,6 +155,7 @@ class _NotificationDialogBoxState extends State<NotificationDialogBox> {
                 children: [
                   ElevatedButton(
                     onPressed: () {
+
                       stopAudio();
                       Navigator.pop(context);
                     },

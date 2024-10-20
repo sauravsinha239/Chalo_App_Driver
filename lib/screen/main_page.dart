@@ -40,7 +40,7 @@ class _MainPageState extends State<MainPage> with SingleTickerProviderStateMixin
       body: TabBarView(
         physics: NeverScrollableScrollPhysics(),
         controller: tabController,
-        children: [
+        children: const [
            Hometab(),
            EarningTab(),
            RatingTab(),
@@ -48,7 +48,7 @@ class _MainPageState extends State<MainPage> with SingleTickerProviderStateMixin
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
-        items:[
+        items:const [
           BottomNavigationBarItem(icon :Icon(Icons.home),label: "Home"),
           BottomNavigationBarItem(icon :Icon(Icons.credit_card),label: "Earnings"),
           BottomNavigationBarItem(icon :Icon(Icons.star_border),label: "Ratings"),
@@ -60,7 +60,7 @@ class _MainPageState extends State<MainPage> with SingleTickerProviderStateMixin
         backgroundColor: darkTheme? Colors.grey: Colors.brown,
 
         type:BottomNavigationBarType.fixed,
-        selectedLabelStyle: TextStyle(fontSize: 14),
+        selectedLabelStyle: const TextStyle(fontSize: 14),
         showUnselectedLabels: true,
         currentIndex: selectIndex,
         onTap: onItemClicked,

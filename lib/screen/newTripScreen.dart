@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 import 'dart:ui' as ui;
 import 'package:drivers/Assistants/assistant.dart';
 import 'package:drivers/global/global.dart';
@@ -14,6 +15,8 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+
+import '../Assistants/blackThemeGoogleMaps.dart';
 
 class NewTripScreen extends StatefulWidget{
   UserRideRequestInformation? userRideRequestInformation;
@@ -61,24 +64,30 @@ class _NewTripScreenState extends State<NewTripScreen> {
         context: context,
         builder: (BuildContext context)=> ProgressDialog(message: "Please Wait...."),
     );
-    Navigator.pop(context);
     var directionOnDetailsInfo = await Assistants.obtainOriginToDestinationDirectionDetails(originLatLng, destinationLatLng);
+    Navigator.pop(context);
 
 
     PolylinePoints pPoints = PolylinePoints();
     List<PointLatLng> decodePolyLinePositionResultList= pPoints.decodePolyline(directionOnDetailsInfo.encodePoints!);
 
-    polyLinePositionCoordinates.clear();
+    //polyLinePositionCoordinates.clear();
 
+    // if(decodePolyLinePositionResultList.isNotEmpty){
+    //   for (var pointLatLng in decodePolyLinePositionResultList) {
+    //     polyLinePositionCoordinates.add(LatLng(pointLatLng.latitude, pointLatLng.longitude));
+    //   }
+    // }
     if(decodePolyLinePositionResultList.isNotEmpty){
-      for (var pointLatLng in decodePolyLinePositionResultList) {
+      decodePolyLinePositionResultList.forEach((PointLatLng pointLatLng){
         polyLinePositionCoordinates.add(LatLng(pointLatLng.latitude, pointLatLng.longitude));
-      }
+      });
     }
     setOfPolyline.clear();
+
     setState(() {
       Polyline polyline =Polyline(
-          polylineId: const PolylineId("PolyLineId"),
+        polylineId: const PolylineId("PolyLineId"),
         jointType: JointType.round,
         points: polyLinePositionCoordinates,
         startCap: Cap.roundCap,
@@ -89,7 +98,7 @@ class _NewTripScreenState extends State<NewTripScreen> {
       setOfPolyline.add(polyline);
     });
     LatLngBounds boundsLatLng;
-    if(originLatLng.longitude > destinationLatLng.longitude && originLatLng.latitude > destinationLatLng.latitude){
+    if(originLatLng.latitude > destinationLatLng.latitude && originLatLng.longitude > destinationLatLng.longitude){
       boundsLatLng = LatLngBounds(southwest: destinationLatLng, northeast: originLatLng);
 
     }
@@ -109,7 +118,7 @@ class _NewTripScreenState extends State<NewTripScreen> {
     else{
       boundsLatLng= LatLngBounds(southwest: originLatLng, northeast: destinationLatLng);
     }
-    newTripGoogleMapController!.animateCamera(CameraUpdate.newLatLngBounds(boundsLatLng, 100));
+    newTripGoogleMapController!.animateCamera(CameraUpdate.newLatLngBounds(boundsLatLng, 65));
     Marker originMarker =Marker(
         markerId: const MarkerId("originId"),
       position: originLatLng,
@@ -148,14 +157,16 @@ class _NewTripScreenState extends State<NewTripScreen> {
     });
 
   }
-@override
+
+
+  @override
   void initState() {
     super.initState();
     saveAssignedDriverDetailsToUserRideRequest();
 
   }
   getDriverLocationAtRealTime(){
-    LatLng oldLatLng =const LatLng(0, 0);
+    LatLng oldLatLng = LatLng(0, 0);
     streamSubscriptionDriverLivePosition =Geolocator.getPositionStream().listen((Position position){
       driverCurrentPosition =position;
       onlineDriverCurrentPosition =position;
@@ -173,7 +184,7 @@ class _NewTripScreenState extends State<NewTripScreen> {
         setOfMarker.removeWhere((element)=> element.markerId.value == "AnimatedMarker");
         setOfMarker.add(animatingMarker);
       });
-oldLatLng =latLngLiveDriverPosition;
+      oldLatLng =latLngLiveDriverPosition;
 
 updateDurationTimeAtRealTime();
 
@@ -182,7 +193,7 @@ updateDurationTimeAtRealTime();
       "Latitude": onlineDriverCurrentPosition!.latitude.toString(),
       "Longitude": onlineDriverCurrentPosition!.longitude.toString(),
     };
-    FirebaseDatabase.instance.ref().child("All Ride Requests").child((widget.userRideRequestInformation!.rideRequestId!));
+    FirebaseDatabase.instance.ref().child("All Ride Requests").child((widget.userRideRequestInformation!.rideRequestId!)).child("driverLocation").set(driverLatLngDataMap);
 
     });
   }
@@ -193,10 +204,11 @@ updateDurationTimeAtRealTime();
         return;
       }
       var originLatLng =LatLng(onlineDriverCurrentPosition!.latitude, onlineDriverCurrentPosition!.longitude);
-      LatLng? destinationLatLng;
+      var destinationLatLng;
 
       if(rideRequestStatus == "accepted"){
-        destinationLatLng= widget.userRideRequestInformation!.originLatLng; //user pickup location
+         destinationLatLng= widget.userRideRequestInformation!.originLatLng; //user pickup location
+
       }
       else{
         destinationLatLng = widget.userRideRequestInformation!.destinationLatLng;
@@ -206,7 +218,9 @@ updateDurationTimeAtRealTime();
 
       if(directionInformation !=null){
         setState(() {
-          durationFromOriginToDestination =directionInformation.distanceText!;
+          durationFromOriginToDestination =directionInformation.durationText!;
+          durationValueForFare=directionInformation.durationValue!.toDouble();
+          distanceValueForFare= directionInformation.distanceValue!.toDouble();
 
         });
       }
@@ -326,6 +340,11 @@ updateDurationTimeAtRealTime();
             onMapCreated: (GoogleMapController controller) {
               _controllerGoogleMap.complete(controller);
               newTripGoogleMapController = controller;
+              if(darkTheme==true){
+                setState(() {
+                  blackThemeGoogleMap(newTripGoogleMapController);
+                });
+              }
               setState(() {
                 mapPadding=350;
               });
@@ -334,7 +353,6 @@ updateDurationTimeAtRealTime();
               var userPickUpLatLng =widget.userRideRequestInformation!.originLatLng;
               drawPolyLineFromOriginToDestination(driverCurrentLatLng, userPickUpLatLng!,darkTheme);
               getDriverLocationAtRealTime();
-
             },
           ),
           //UI
@@ -365,6 +383,7 @@ updateDurationTimeAtRealTime();
                         color: darkTheme ? Colors.green: Colors.blue ),
                       ),
                         const SizedBox(height: 10,),
+
 
                         Divider(thickness:1 ,color: darkTheme ? Colors.yellow : Colors.green,),
 
@@ -429,25 +448,20 @@ updateDurationTimeAtRealTime();
                               //[driver has arrived at user pickup location ] -Arrived Button
                               if(rideRequestStatus=="accepted"){
                                 rideRequestStatus ="arrived";
+
                                 FirebaseDatabase.instance.ref().child("All Ride Requests").child(widget.userRideRequestInformation!.rideRequestId!).child("status").set(rideRequestStatus);
-                                showDialog(
-                                    context: context,
-                                    barrierDismissible: false,
-                                    builder: (BuildContext context) => ProgressDialog(message: "Loading...",),
-                                );
-                                print("Arrived at user location. Drawing polyline..");
-                                await drawPolyLineFromOriginToDestination(
-                                    widget.userRideRequestInformation!.originLatLng!,
-                                    widget.userRideRequestInformation!.destinationLatLng!,
-                                    darkTheme);
-                                Navigator.pop(context);
-                                print("Polyline drawn. Dialog dismissed.");
                                 setState(() {
                                   buttonTitle ="Let's Go";
                                   buttonColor=  Colors.lightGreen[800];
-
                                 });
 
+                                showDialog(
+                                  context: context,
+                                  barrierDismissible: false,
+                                  builder: (BuildContext context) => ProgressDialog(message: "Loading...",),
+                                );
+                                drawPolyLineFromOriginToDestination(widget.userRideRequestInformation!.originLatLng!, widget.userRideRequestInformation!.destinationLatLng!,darkTheme);
+                                Navigator.pop(context);
                               }
                               //user has been picked up from users current location  -lets Go Button
                               else if( rideRequestStatus =="arrived"){
@@ -459,7 +473,6 @@ updateDurationTimeAtRealTime();
                                   buttonColor=  Colors.red[900];
 
                                 });
-
                               }
                               //[User and driver has reached drop-off locations ] -End trip button
                               else if(rideRequestStatus=="onTrip"){

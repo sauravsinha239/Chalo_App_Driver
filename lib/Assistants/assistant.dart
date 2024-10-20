@@ -2,6 +2,7 @@
 import 'dart:developer';
 
 import 'package:drivers/Assistants/request_assistant.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_geofire/flutter_geofire.dart';
@@ -14,6 +15,7 @@ import '../global/map_key.dart';
 import '../infoHandler/app_info.dart';
 import '../model/direction_details_info.dart';
 import '../model/directions.dart';
+import '../model/tripHistoryModel.dart';
 import '../model/user_model.dart';
 
 class Assistants{
@@ -76,8 +78,8 @@ static Future <DirectionDetailsInfo> obtainOriginToDestinationDirectionDetails(L
 
   String urlObtainOriginToDestinationDirectionDetails = "https://maps.gomaps.pro/maps/api/directions/json?destination=${destinationPosition.latitude},${destinationPosition.longitude}&origin=${originPosition.latitude},${originPosition.longitude}&key=$goMapKey";
   var responseDirectionApi= await RequestAssistant.receiveRequest(urlObtainOriginToDestinationDirectionDetails);
-  print("Response Status is   = $responseDirectionApi");
-  log("Check connection of direction Status is = $responseDirectionApi");
+  // print("Response Status is   = $responseDirectionApi");
+  // log("Check connection of direction Status is = $responseDirectionApi");
   if(responseDirectionApi=="Error Occurred Failed \. No Response"){
     // log("Check connection of direction in if cond  $responseDirectionApi");
    // return null;
@@ -98,17 +100,32 @@ static pauseLiveLocationUpdate(){
   streamSubscriptionPosition!.pause();
   Geofire.removeLocation(firebaseAuth.currentUser!.uid);
 }
+
+
 static double calculateFareAmountFromOriginToDestination(DirectionDetailsInfo directionDetailsInfo){
+  double durationValue= durationValueForFare - directionDetailsInfo.durationValue!;
+  double distanceValue= distanceValueForFare- directionDetailsInfo.distanceValue!;
 
     // Calculate fare components based on duration and distance in minutes and kilometers
-    double timeTravelledFareAmountPerMinute = (directionDetailsInfo.durationValue! / 60) * 2.0; // 2 INR per minute
-    double distanceTravelledFareAmountPerKilometer = (directionDetailsInfo.distanceValue! / 1000) * 10.0; // 10 INR per km
+    // double timeTravelledFareAmountPerMinute = (directionDetailsInfo.durationValue! / 60) * 3.0; // 2 INR per minute
+    // double distanceTravelledFareAmountPerKilometer = (directionDetailsInfo.distanceValue! / 1000) * 10.0;
+  double timeTravelledFareAmountPerMinute = (durationValue / 60) * 2.0; // 2 INR per minute
+  double distanceTravelledFareAmountPerKilometer = (distanceValue / 1000) * 10.0;
+
+
 
     // Total fare amount in INR
     double totalFareAmount = distanceTravelledFareAmountPerKilometer+timeTravelledFareAmountPerMinute;
 
     // Calculate fare based on vehicle type
     double resultFareAmount;
+    log("Distance Tarvel Amount km = ${distanceTravelledFareAmountPerKilometer}");
+    log("Distance Value = ${distanceValue}");
+    log("Distance Text = ${directionDetailsInfo.distanceText!}");
+    log("Duration Text = ${directionDetailsInfo.durationText}");
+    log("DurationValue ${durationValue}");
+    log("time travel fare amount = ${timeTravelledFareAmountPerMinute}");
+
 
     if (driverVehicleType == "bike") {
       resultFareAmount = (totalFareAmount * 0.8); // Discount for bikes
@@ -120,13 +137,87 @@ static double calculateFareAmountFromOriginToDestination(DirectionDetailsInfo di
       resultFareAmount = totalFareAmount; // Default case
     }
     // Return the fare amount rounded to two decimal places
+    log("result fare amount =${resultFareAmount}");
     return double.parse(resultFareAmount.toStringAsFixed(2));
 
-    print("Duration Value (seconds): ${directionDetailsInfo.durationValue}");
-    print("Distance Value (meters): ${directionDetailsInfo.distanceValue}");
-    print("Calculated Fare Amount: ₹${totalFareAmount}");
-    print("Final Fare Amount for ${driverVehicleType}: ₹${resultFareAmount}");
-
 }
 
+// retrieve the trips keys for online user
+//trip key == ride request key
+static void readTripKeysForOnlineDriver(context){
+  FirebaseDatabase.instance.ref().child("All Ride Requests").orderByChild("driverID").equalTo(firebaseAuth.currentUser!.uid).once().then((snap){
+    
+    if(snap.snapshot.value !=null){
+      Map keysTripsId = snap.snapshot.value as Map;
+      //
+      //count total number trips and share it with provider
+      
+      int overAllTripCounter =keysTripsId.length;
+      Provider.of<AppInfo>(context, listen: false).updateOverAllTripsCounter(overAllTripCounter);
+
+      //share trips key  with Provider
+
+      List<String> tripKeysList =[];
+      keysTripsId.forEach((key, value){
+        tripKeysList.add(key);
+      });
+      Provider.of<AppInfo>(context, listen: false).updateOverAllTripsKeys(tripKeysList);
+
+      //get trips key data -read trip complete information'
+      readTripKeyInformation(context);
+    }
+  });
+
 }
+  static void readTripKeyInformation(context){
+
+    var tripsAllKeys = Provider.of<AppInfo>(context, listen: false).historyTripsKeyList;
+
+    for(String eachKey in tripsAllKeys){
+      FirebaseDatabase.instance.ref()
+          .child("All Ride Requests")
+          .child(eachKey)
+          .once()
+          .then((snap){
+        var eachTripHistory =TripHistoryModel.formSnapshot(snap.snapshot);
+
+        if((snap.snapshot.value as Map)["status"] == "ended"){
+          //Update or add each History to OverAllTrips Histroy data list
+          Provider.of<AppInfo>(context, listen: false).updateOverAllHistoryInformation(eachTripHistory);
+        }
+      }).catchError((e){
+        print("Error fetching trip history for key $eachKey: $e");
+      });
+    }
+  }
+  //read DriverEarnings
+static void readDriverEarnings(context){
+
+  FirebaseDatabase.instance.ref().child("drivers").child(firebaseAuth.currentUser!.uid).child("earnings").once().then((snap){
+    if(snap.snapshot.value !=null) {
+      String driverEarnings =snap.snapshot.value.toString();
+      log("Driver Earnings Found = $driverEarnings");
+      print("Driver Earnings Found = $driverEarnings");
+
+      Provider.of<AppInfo>(context ,listen: false).updateDriverTotalEarnings(driverEarnings);
+      log("Driver Earnings Found = $driverEarnings");
+    }
+    });
+      readTripKeysForOnlineDriver(context);
+    }
+
+    static void readDriverRatings(context){
+      FirebaseDatabase.instance.ref().child("drivers").child(firebaseAuth.currentUser!.uid).child("ratings").once().then((snap){
+        if(snap.snapshot.value !=null) {
+          String driverRatings =snap.snapshot.value.toString();
+          Provider.of<AppInfo>(context ,listen: false).updateDriverAverageRatings(driverRatings);
+          log("Driver Ratings Found = $driverRatings");
+        }
+      });
+
+    }
+
+
+}
+ 
+

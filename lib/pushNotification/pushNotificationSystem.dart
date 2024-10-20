@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:drivers/global/global.dart';
 import 'package:drivers/model/userRideRequestInformaition.dart';
 import 'package:drivers/pushNotification/notificationDialogBox.dart';
@@ -53,21 +55,25 @@ class PushNotificationSystem{
 
             // Process the ride request details
             final rideData = snapData.snapshot.value as Map;
-            double originLat = double.tryParse(rideData["origin"]["Latitude"]?.toString() ?? '0') ?? 0.0;
-            double originLng = double.tryParse(rideData["origin"]["Longitude"]?.toString() ?? '0') ?? 0.0;
+            double ? originLat = double.tryParse(rideData["origin"]["Latitude"].toString());
+            double ? originLng = double.tryParse(rideData["origin"]["Longitude"]!.toString()) ;
             String originAddress = rideData["originAddress"]?.toString() ?? 'Unknown Address';
-            double destinationLat = double.tryParse(rideData["destination"]["Latitude"]?.toString() ?? '0') ?? 0.0;
-            double destinationLng = double.tryParse(rideData["destination"]["Longitude"]?.toString() ?? '0') ?? 0.0;
+            double ? destinationLat = double.tryParse(rideData["destination"]["Latitude"].toString());
+
+            double  ?destinationLng = double.tryParse(rideData["destination"]["Longitude"].toString() );
             String destinationAddress = rideData["destinationAddress"]?.toString() ?? 'Unknown Address';
             String userName = rideData["userName"]?.toString() ?? 'Unknown User';
             String userPhone = rideData["userPhone"]?.toString() ?? 'Unknown Phone';
             String? rideRequestId = snapData.snapshot.key;
+            log("Destination latlng = ${destinationLng} ${destinationLat}");
+            log("Origin latlng = $originLng} ${originLat}");
+
 
             // Create an instance of UserRideRequestInformation with fetched details
             UserRideRequestInformation userRideRequestDetails = UserRideRequestInformation();
-            userRideRequestDetails.originLatLng = LatLng(originLat, originLng);
+            userRideRequestDetails.originLatLng = LatLng(originLat!, originLng!);
             userRideRequestDetails.originAddress = originAddress;
-            userRideRequestDetails.destinationLatLng = LatLng(destinationLat, destinationLng);
+            userRideRequestDetails.destinationLatLng = LatLng(destinationLat!, destinationLng!);
             userRideRequestDetails.destinationAddress = destinationAddress;
             userRideRequestDetails.userName = userName;
             userRideRequestDetails.userPhone = userPhone;
@@ -96,6 +102,7 @@ class PushNotificationSystem{
       Fluttertoast.showToast(msg: "Error occurred: ${error.toString()}");
     });
   }
+
 
   Future genRateAndGetTokens()async{
     String? registrationToken= await messaging.getToken();

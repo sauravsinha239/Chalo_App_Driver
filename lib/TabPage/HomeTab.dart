@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:drivers/Assistants/blackThemeGoogleMaps.dart';
 import 'package:drivers/global/global.dart';
 import 'package:drivers/model/driverInfo.dart';
 import 'package:drivers/pushNotification/pushNotificationSystem.dart';
@@ -52,9 +53,11 @@ class _HometabState extends State<Hometab> {
     newGoogleMapController!
         .animateCamera(CameraUpdate.newCameraPosition(cameraPosition));
     //ReverseGeoCode
-    // String humanReadableAddress =
+     String humanReadableAddress =
     await Assistants.searchAddressForGeographicCoordinates(
         driverCurrentPosition!, context);
+
+
   }
 
   //permission check
@@ -67,7 +70,6 @@ class _HometabState extends State<Hometab> {
   }
 
 
-
 GetDriverData gdd =GetDriverData();
 
 @override
@@ -77,6 +79,8 @@ GetDriverData gdd =GetDriverData();
     PushNotificationSystem pushNotificationSystem = PushNotificationSystem();
     pushNotificationSystem.initializeCloudMessaging(context);
     pushNotificationSystem.genRateAndGetTokens();
+    Assistants.readDriverRatings(context);
+    Assistants.readDriverEarnings(context);
 
   }
   @override
@@ -98,6 +102,11 @@ GetDriverData gdd =GetDriverData();
            _controllerGoogleMap.complete(controller);
            newGoogleMapController = controller;
            locateDriverPosition();
+           if(darkTheme==true){
+             setState(() {
+               blackThemeGoogleMap(newGoogleMapController);
+             });
+           }
          },
        ),
        //Ui for Online offline Driver

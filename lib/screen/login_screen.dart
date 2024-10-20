@@ -9,6 +9,7 @@ import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import '../Assistants/assistant.dart';
 import '../global/global.dart';
 import '../model/user_model.dart';
 import '../splash_screen/splash.dart';
@@ -55,6 +56,8 @@ class _LoginScreenState extends State<LoginScreen> {
             DataSnapshot snapshot = event.snapshot;
             userModelCurrentInfo = UserModel.fromSnapshot(snapshot);
             //end
+            Assistants.readDriverRatings(context);
+            Assistants.readDriverEarnings(context);
 
           }
           else{
