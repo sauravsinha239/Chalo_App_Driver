@@ -42,10 +42,10 @@ class _VehicleScrennInformationState extends State<VehicleScrennInformation> {
           "drivers");
       UserRef.child(currentUser!.uid).child("vehicleDetails").set(
           driverCarInfoMap);
-      print("vehicle types log ${vehicleTypes}");
-      print("Selected vehicle types ${selectedVehicleType}");
+      print("vehicle types log $vehicleTypes");
+      print("Selected vehicle types $selectedVehicleType");
       await Fluttertoast.showToast(msg: "Vehicle Details Saved , Login now");
-      Navigator.push(
+      Navigator.pushReplacement(
           context, MaterialPageRoute(builder: (c) => const LoginScreen()));
     }
     else {

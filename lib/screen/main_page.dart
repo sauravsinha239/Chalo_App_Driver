@@ -4,6 +4,7 @@ import 'package:drivers/TabPage/AccountsTab.dart';
 import 'package:drivers/TabPage/EarningTab.dart';
 import 'package:drivers/TabPage/HomeTab.dart';
 import 'package:drivers/TabPage/RatingTab.dart';
+import 'package:drivers/widgets/getDriverData.dart';
 import 'package:flutter/material.dart';
 class MainPage extends StatefulWidget{
   const MainPage({super.key});
@@ -21,13 +22,14 @@ class _MainPageState extends State<MainPage> with SingleTickerProviderStateMixin
       tabController!.index=selectIndex;
     });
   }
-
+GetDriverData getDriverData  =GetDriverData();
 
   @override
   void initState() {
     super.initState();
 
     tabController = TabController(length: 4, vsync: this);
+    getDriverData.readCurrentDriverInformation();
 
   }
 
@@ -38,7 +40,7 @@ class _MainPageState extends State<MainPage> with SingleTickerProviderStateMixin
     bool darkTheme = MediaQuery.of(context).platformBrightness == Brightness.dark;
     return Scaffold(
       body: TabBarView(
-        physics: NeverScrollableScrollPhysics(),
+        physics: const NeverScrollableScrollPhysics(),
         controller: tabController,
         children: const [
            Hometab(),

@@ -15,6 +15,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../Assistants/blackThemeGoogleMaps.dart';
 
@@ -50,6 +51,7 @@ class _NewTripScreenState extends State<NewTripScreen> {
   Position? onlineDriverCurrentPosition;
   String rideRequestStatus ="accepted";
   String durationFromOriginToDestination ="";
+  String ? distanceFromOriginTODestination="";
   bool isRequestDirectionDetails =false;
   //Step 1: When Driver Accepts the userRide request
   //originLatlng= driverCurrentLocation
@@ -157,6 +159,16 @@ class _NewTripScreenState extends State<NewTripScreen> {
     });
 
   }
+  //Make phone calll
+  Future<void> _makePhoneCall(String Url)async{
+
+    if(await canLaunch(Url )){
+      await launch(Url);
+    }
+    else{
+      throw "Could Not launch $Url";
+    }
+  }
 
 
   @override
@@ -219,6 +231,7 @@ updateDurationTimeAtRealTime();
       if(directionInformation !=null){
         setState(() {
           durationFromOriginToDestination =directionInformation.durationText!;
+          distanceFromOriginTODestination =directionInformation.distanceText;
           durationValueForFare=directionInformation.durationValue!.toDouble();
           distanceValueForFare= directionInformation.distanceValue!.toDouble();
 
@@ -378,7 +391,7 @@ updateDurationTimeAtRealTime();
                     padding: const EdgeInsets.all(10),
                     child: Column(
                       children: [
-                      Text(durationFromOriginToDestination,
+                      Text("$durationFromOriginToDestination\n${distanceFromOriginTODestination!}",
                         style: GoogleFonts.lato(fontSize: 24, fontWeight: FontWeight.bold,
                         color: darkTheme ? Colors.green: Colors.blue ),
                       ),
@@ -397,7 +410,9 @@ updateDurationTimeAtRealTime();
                               ),
                             ),
                             IconButton(
-                                onPressed: (){},
+                                onPressed: (){
+                                  _makePhoneCall("tel: ${widget.userRideRequestInformation?.userPhone}");
+                                },
                                 icon: Icon(Icons.phone, color: darkTheme ? Colors.yellow: Colors.green,size: 35,),
                             ),
                           ],
