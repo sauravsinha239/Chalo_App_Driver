@@ -20,7 +20,7 @@ class _EarningTabState extends State<EarningTab> {
     bool darkTheme= MediaQuery.of(context).platformBrightness == Brightness.dark;
 
     return Container(
-      color: darkTheme ? Colors.lightBlue[900] : Colors.purple[100],
+      color: darkTheme ? Colors.lightBlue[700] : Colors.lightBlue[100],
       child: Column(
         children: [
           Container(
@@ -31,16 +31,16 @@ class _EarningTabState extends State<EarningTab> {
               child: Column(
                 children: [
                   Text("Your Earnings",
-                    style: GoogleFonts.lato(color: darkTheme? Colors.green: Colors.red,
+                    style: GoogleFonts.niconne(color: darkTheme? Colors.green: Colors.red,
                       fontWeight: FontWeight.bold,
-                      fontSize: 16,
+                      fontSize: 38,
                     ),
                   ),
                   Text(
                     "₹ ${Provider.of<AppInfo>(context, listen: false).driverTotalEarnings}",
                     style: GoogleFonts.lato(
                       color: darkTheme? Colors.blue[500]: Colors.orange[600],
-                      fontSize: 60,
+                      fontSize: 50,
                       fontWeight: FontWeight.bold,
                     ),
 
@@ -58,7 +58,7 @@ class _EarningTabState extends State<EarningTab> {
               },
 
               style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.blue,
+                backgroundColor: Colors.lightBlue[700],
 
               ),
               child: Padding(
@@ -75,17 +75,16 @@ class _EarningTabState extends State<EarningTab> {
                     SizedBox(width: 10,),
                     Text(
                       "Trips Completed",
-                      style: GoogleFonts.lato(fontSize: 20, fontWeight: FontWeight.bold,
-                          color: Colors.white54),
+                      style: GoogleFonts.niconne(fontSize: 34,
+                          color: Colors.white),
                     ),
                     Expanded(
                         child: Text(
                             Provider.of<AppInfo>(context, listen: false).allTripsHistoryInformationList.length.toString(),
                           textAlign: TextAlign.end,
-                          style: GoogleFonts.lato(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white54
+                          style: GoogleFonts.niconne(
+                              fontSize: 38,
+                              color: Colors.white
                           ),
                         )
                     ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 import '../infoHandler/app_info.dart';
@@ -17,12 +18,12 @@ class _TripsHistoryScreenState extends State<TripsHistoryScreen> {
   Widget build(BuildContext context) {
   bool darkTheme= MediaQuery.of(context).platformBrightness == Brightness.dark;
   return Scaffold(
-    backgroundColor: darkTheme ? Colors.black: Colors.white,
+    backgroundColor: darkTheme ? Colors.lightBlue[700]: Colors.lightBlue[100],
     appBar: AppBar(
       backgroundColor: darkTheme? Colors.black: Colors.white,
       title: Text(
         "Trips History",
-            style: TextStyle(color: darkTheme? Colors.deepOrange: Colors.purple[900], fontWeight: FontWeight.bold, fontSize: 24),
+            style: GoogleFonts.niconne(color: darkTheme? Colors.deepOrange: Colors.purple[900], fontWeight: FontWeight.bold, fontSize: 34),
       ),
       leading: IconButton(
         icon: Icon(Icons.close, color: Colors.red,size: 34,),
@@ -39,7 +40,7 @@ class _TripsHistoryScreenState extends State<TripsHistoryScreen> {
       child: ListView.separated(
           itemBuilder: (context, i) {
             return Card(
-              color:darkTheme? Colors.purple[900]:Colors.blue[200],
+              color:darkTheme? Colors.lightBlue[900]:Colors.lightBlue[100],
               shadowColor: Colors.transparent,
               child: HistoryDesignUi(
                 tripsHistoryModel: Provider.of<AppInfo>(context, listen: false).allTripsHistoryInformationList[i],

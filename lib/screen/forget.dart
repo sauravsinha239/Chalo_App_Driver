@@ -3,6 +3,7 @@ import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import '../global/global.dart';
 import 'login_screen.dart';
@@ -44,11 +45,9 @@ class _forgetScreenState extends State<forgetScreen> {
             Text(
               'Recovery',
               textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 40,
+              style: GoogleFonts.niconne(
+                fontSize: 48,
                 color: darktheme ? Colors.greenAccent : Colors.orangeAccent,
-                fontWeight: FontWeight.bold,
-                fontStyle: FontStyle.italic,
               ),
             ),
             const SizedBox(height:50,),
@@ -104,7 +103,7 @@ class _forgetScreenState extends State<forgetScreen> {
                             emailTextEditor.text=Text;
                           }),
                         ),
-                        const SizedBox(height:20,),
+                        const SizedBox(height:80,),
                         ElevatedButton(
                           style: ElevatedButton.styleFrom(
                             backgroundColor: darktheme ? Colors.green : Colors.orange,
@@ -119,11 +118,10 @@ class _forgetScreenState extends State<forgetScreen> {
                           onPressed: (){
                             _Submit();
 
-                          }, child: const Text(
+                          }, child:  Text(
                            "Send password reset link",
-                          style: TextStyle(
-                            fontSize: 17,
-                            fontWeight: FontWeight.bold,
+                          style: GoogleFonts.niconne(
+                            fontSize: 20,
                             color: Colors.white,
                           ),
 
@@ -136,13 +134,13 @@ class _forgetScreenState extends State<forgetScreen> {
                           onTap: () {
                             Navigator.pushReplacement(context,MaterialPageRoute(builder:  (c)=>const LoginScreen()));
                           },
-                          child: const Center( child:
+                          child: Center( child:
                           Text(
                             "Already have an account?",
-                            style: TextStyle(
+                            style: GoogleFonts.niconne(
                               color: Colors.grey,
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
+                              fontSize: 20,
+
                             ),
                           ),
                           ),

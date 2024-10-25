@@ -96,10 +96,9 @@ class _LoginScreenState extends State<LoginScreen> {
             Text(
               'Login Now',
               textAlign: TextAlign.center,
-              style: GoogleFonts.courierPrime(
+              style: GoogleFonts.niconne(
                 fontSize: 40,
                 color: darktheme ? Colors.yellowAccent : Colors.red,
-                fontWeight: FontWeight.bold,
                 fontStyle: FontStyle.italic,
               ),
             ),
@@ -226,12 +225,11 @@ class _LoginScreenState extends State<LoginScreen> {
                           onPressed: () {
                             _Submit();
                           },
-                          child: const Text(
-                            'Sign in',
-                            style: TextStyle(
-                              fontSize: 25,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.purple,
+                          child:  Text(
+                            "Log in",
+                            style: GoogleFonts.niconne(
+                              fontSize: 32,
+                              color: Colors.purple[900],
                             ),
                           ),
                         ),
@@ -247,10 +245,10 @@ class _LoginScreenState extends State<LoginScreen> {
                           },
                           child: Text(
                             'Forget Password',
-                            style: TextStyle(
+                            style: GoogleFonts.niconne(
                               color:
                                   darktheme ? Colors.yellowAccent : Colors.red,
-                              fontSize: 16,
+                              fontSize: 26,
                             ),
                           ),
                         ),
@@ -266,13 +264,12 @@ class _LoginScreenState extends State<LoginScreen> {
                                 MaterialPageRoute(
                                     builder: (c) => const register_screen()));
                           },
-                          child: const Center(
+                          child:  Center(
                             child: Text(
                               "Doesn't have an account?",
-                              style: TextStyle(
+                              style: GoogleFonts.niconne(
                                 color: Colors.grey,
-                                fontSize: 15,
-                                fontWeight: FontWeight.bold,
+                                fontSize: 25,
                               ),
                             ),
                           ),

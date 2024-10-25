@@ -62,18 +62,18 @@ class _RatingTabState extends State<RatingTab> {
     bool darkTheme= MediaQuery.of(context).platformBrightness == Brightness.dark;
     return Scaffold(
 
-      backgroundColor: darkTheme? Colors.black: Colors.white,
+      backgroundColor: darkTheme? Colors.lightBlue[700]: Colors.lightBlue[200],
 
       body: Dialog(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20),
         ),
-        backgroundColor: darkTheme ? Colors.grey: Colors.white,
+        backgroundColor: darkTheme ? Colors.grey: Colors.red,
         child: Container(
           margin: EdgeInsets.all(4),
           width: double.infinity,
           decoration: BoxDecoration(
-            color: darkTheme? Colors.grey: Colors.pink,
+            color: darkTheme? Colors.grey: Colors.green,
             borderRadius: BorderRadius.circular(15),
           ),
           child: Column(
@@ -81,10 +81,10 @@ class _RatingTabState extends State<RatingTab> {
             children: [
               SizedBox(height: 22,),
               Text("Your Ratings",
-              style: GoogleFonts.lato(
+              style: GoogleFonts.niconne(
                   fontWeight: FontWeight.bold,
-                  fontSize: 20,
-                  color: darkTheme? Colors.yellow:Colors.green),
+                  fontSize: 38,
+                  color: darkTheme? Colors.yellow:Colors.purple),
               ),
               SizedBox(height: 20,),
               SmoothStarRating(

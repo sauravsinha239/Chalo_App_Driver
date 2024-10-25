@@ -77,14 +77,10 @@ class _register_screenState extends State<register_screen> {
             Text(
               'Register',
               textAlign: TextAlign.center,
-              style: GoogleFonts.courierPrime(
+              style: GoogleFonts.niconne(
                 color: darktheme ? Colors.amber.shade400:Colors.red,
-                fontSize: 30,
-                fontWeight: FontWeight.w600,
-                fontStyle: FontStyle.italic,
-
+                fontSize: 32,
               ),
-
             ),
             Padding(
               padding: const EdgeInsets.fromLTRB(15,20,15,50),
@@ -372,12 +368,12 @@ class _register_screenState extends State<register_screen> {
                           ),
                             onPressed: (){
                             _Submit();
-                            }, child: const Text(
+                            }, child:  Text(
                           'Register',
-                          style: TextStyle(
+                          style: GoogleFonts.niconne(
                             fontSize: 20,
                             fontWeight: FontWeight.bold,
-                            color: Colors.purple,
+                            color: Colors.purple[800],
                           ),
 
                         ),
@@ -389,7 +385,7 @@ class _register_screenState extends State<register_screen> {
                           },
                           child: Text(
                             'Forget Password',
-                            style: GoogleFonts.lato(
+                            style: GoogleFonts.niconne(
                               color: darktheme ? Colors.yellowAccent : Colors.red,
                               fontSize: 20,
                             ),
@@ -400,10 +396,10 @@ class _register_screenState extends State<register_screen> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            const Text("Have an account?",
-                            style: TextStyle(
+                             Text("Have an account?",
+                            style: GoogleFonts.niconne(
                               color: Colors.grey,
-                              fontSize: 14,
+                              fontSize: 20,
                               fontWeight: FontWeight.bold,
                             ),),
                             const SizedBox(width: 10,),
@@ -413,8 +409,8 @@ class _register_screenState extends State<register_screen> {
                               },
                               child: Text(
                                 "Sign in",
-                                style: GoogleFonts.lato(
-                                  fontSize: 15,
+                                style: GoogleFonts.niconne(
+                                  fontSize: 20,
                                   color: darktheme ? Colors.grey :Colors.grey,
                                 ),
                               ),

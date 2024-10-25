@@ -1,13 +1,10 @@
-import 'package:drivers/TabPage/HomeTab.dart';
-import 'package:drivers/model/driverInfo.dart';
+import 'package:drivers/screen/VehicleDetailsUpdateScreen.dart';
 import 'package:drivers/screen/main_page.dart';
-import 'package:drivers/widgets/getDriverData.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
-
 import '../global/global.dart';
 import '../screen/login_screen.dart';
 
@@ -25,10 +22,7 @@ class _AccountsTabState extends State<AccountsTab> {
   final nameTextEditor= TextEditingController();
   final phoneTextEditor= TextEditingController();
   final addressTextEditor= TextEditingController();
-  final vehicleTypeTextEditor= TextEditingController();
-  final modelTextEditor= TextEditingController();
-  final numberTextEditor= TextEditingController();
-  final colorTextEditor= TextEditingController();
+
 
   DatabaseReference userRef= FirebaseDatabase.instance.ref().child("drivers");
 
@@ -181,210 +175,6 @@ class _AccountsTabState extends State<AccountsTab> {
         }
     );
   }
-//Vehicle Type update
-  Future<void> showVehicleTypeDialogAlert(BuildContext context, String vehicle){
-    vehicleTypeTextEditor.text =vehicle;
-
-    return showDialog(
-        context: context,
-        builder:(context){
-          return AlertDialog(
-            title:  Text("Update", style: GoogleFonts.lato(fontSize: 18,fontWeight: FontWeight.bold),),
-            content: SingleChildScrollView(
-              child: Column(
-                children: [
-                  TextFormField(
-                    controller: vehicleTypeTextEditor,
-                  )
-                ],
-              ),
-            ),
-            actions: [
-              TextButton(
-                onPressed: (){
-                  Navigator.pop(context);
-                },
-                child: const Text("Cancel", style: TextStyle(color: Colors.red),),
-              ),
-              TextButton(
-                onPressed: (){
-
-                userRef.child(firebaseAuth.currentUser!.uid).child("vehicleDetails").update({
-                    "vehicleType" : vehicleTypeTextEditor.text.trim().toLowerCase(),
-                  }).then((value){
-                    // change state
-                    setState(() {
-                      onlineDriverData.vehicleType= vehicleTypeTextEditor.text.trim();
-
-                    });
-                    vehicleTypeTextEditor.clear();
-                    Fluttertoast.showToast(msg: "Modified Successfully.");
-
-                  }).catchError((errorMessage){
-                    Fluttertoast.showToast(msg: "Error Occurred!. \n $errorMessage");
-                  });
-                  Navigator.pop(context);
-                },
-                child: const Text("Ok", style: TextStyle(color: Colors.green),),
-              ),
-            ],
-          );
-        }
-    );
-  }
-  //vehicle color
-  Future<void> showVehicleColorDialogAlert(BuildContext context, String color){
-    colorTextEditor.text =color;
-
-    return showDialog(
-        context: context,
-        builder:(context){
-          return AlertDialog(
-            title:  Text("Update", style: GoogleFonts.lato(fontSize: 18,fontWeight: FontWeight.bold),),
-            content: SingleChildScrollView(
-              child: Column(
-                children: [
-                  TextFormField(
-                    controller: colorTextEditor,
-                  )
-                ],
-              ),
-            ),
-            actions: [
-              TextButton(
-                onPressed: (){
-                  Navigator.pop(context);
-                },
-                child: const Text("Cancel", style: TextStyle(color: Colors.red),),
-              ),
-              TextButton(
-                onPressed: (){
-
-                  userRef.child(firebaseAuth.currentUser!.uid).child("vehicleDetails").update({
-                    "vehicleColor" : colorTextEditor.text.trim(),
-                  }).then((value){
-                    // change state
-                    setState(() {
-                      onlineDriverData.vehicleColor= colorTextEditor.text.trim();
-
-                    });
-                    colorTextEditor.clear();
-                    Fluttertoast.showToast(msg: "Modified Successfully.");
-
-                  }).catchError((errorMessage){
-                    Fluttertoast.showToast(msg: "Error Occurred!. \n $errorMessage");
-                  });
-                  Navigator.pop(context);
-                },
-                child: const Text("Ok", style: TextStyle(color: Colors.green),),
-              ),
-            ],
-          );
-        }
-    );
-  }
-  //VehicleModel
-  Future<void> showVehicleModelDialogAlert(BuildContext context, String model){
-    modelTextEditor.text =model;
-
-    return showDialog(
-        context: context,
-        builder:(context){
-          return AlertDialog(
-            title:  Text("Update", style: GoogleFonts.lato(fontSize: 18,fontWeight: FontWeight.bold),),
-            content: SingleChildScrollView(
-              child: Column(
-                children: [
-                  TextFormField(
-                    controller: modelTextEditor,
-                  )
-                ],
-              ),
-            ),
-            actions: [
-              TextButton(
-                onPressed: (){
-                  Navigator.pop(context);
-                },
-                child: const Text("Cancel", style: TextStyle(color: Colors.red),),
-              ),
-              TextButton(
-                onPressed: (){
-
-                  userRef.child(firebaseAuth.currentUser!.uid).child("vehicleDetails").update({
-                    "vehicleModel" : modelTextEditor.text.trim(),
-                  }).then((value){
-                    // change state
-                    setState(() {
-                      onlineDriverData.vehicleModel= modelTextEditor.text.trim();
-
-                    });
-                    modelTextEditor.clear();
-                    Fluttertoast.showToast(msg: "Modified Successfully.");
-
-                  }).catchError((errorMessage){
-                    Fluttertoast.showToast(msg: "Error Occurred!. \n $errorMessage");
-                  });
-                  Navigator.pop(context);
-                },
-                child: const Text("Ok", style: TextStyle(color: Colors.green),),
-              ),
-            ],
-          );
-        }
-    );
-  }
-  //VehicleNumber
-  Future<void> showVehicleNumberDialogAlert(BuildContext context, String number){
-    numberTextEditor.text =number;
-
-    return showDialog(
-        context: context,
-        builder:(context){
-          return AlertDialog(
-            title:  Text("Update", style: GoogleFonts.lato(fontSize: 18,fontWeight: FontWeight.bold),),
-            content: SingleChildScrollView(
-              child: Column(
-                children: [
-                  TextFormField(
-                    controller: numberTextEditor,
-                  )
-                ],
-              ),
-            ),
-            actions: [
-              TextButton(
-                onPressed: (){
-                  Navigator.pop(context);
-                },
-                child: const Text("Cancel", style: TextStyle(color: Colors.red),),
-              ),
-              TextButton(
-                onPressed: (){
-
-                  userRef.child(firebaseAuth.currentUser!.uid).child("vehicleDetails").update({
-                    "vehicleNumber" : numberTextEditor.text.trim(),
-                  }).then((value){
-                    // change state
-                    setState(() {
-                      onlineDriverData.vehicleNumber= numberTextEditor.text.trim();
-
-                    });
-                    numberTextEditor.clear();
-                    Fluttertoast.showToast(msg: "Modified Successfully.");
-
-                  }).catchError((errorMessage){
-                    Fluttertoast.showToast(msg: "Error Occurred!. \n $errorMessage");
-                  });
-                  Navigator.pop(context);
-                },
-                child: const Text("Ok", style: TextStyle(color: Colors.green),),
-              ),
-            ],
-          );
-        }
-    );
-  }
 
 @override
 
@@ -399,6 +189,7 @@ class _AccountsTabState extends State<AccountsTab> {
 
       },
       child: Scaffold(
+        backgroundColor: darkTheme? Colors.lightBlue[800]:Colors.lightBlue[200],
 
         resizeToAvoidBottomInset: false,
         appBar: AppBar(
@@ -412,7 +203,7 @@ class _AccountsTabState extends State<AccountsTab> {
           title:  Text(
             "Account",
             style: GoogleFonts.niconne(
-                color: Colors.yellowAccent,
+                color: Colors.green,
                 fontWeight:
                 FontWeight.bold,
                 fontSize: 38),
@@ -421,7 +212,7 @@ class _AccountsTabState extends State<AccountsTab> {
           elevation: 0.0,
         ),
         body: ListView(
-          padding: const EdgeInsets.all(0),
+          padding: const EdgeInsets.all(30),
           children: [
             Center(
               child: Padding(
@@ -430,21 +221,23 @@ class _AccountsTabState extends State<AccountsTab> {
                 child: Column(
                   children: [
                     Container(
-                      padding: const EdgeInsets.all(30),
+                      padding: const EdgeInsets.all(60),
                       decoration: const BoxDecoration(
                         color: Colors.lightBlueAccent,shape: BoxShape.circle,
                       ),
                       child: const Icon(Icons.person, color: Colors.white,),
                     ),
-                    const SizedBox(height: 30,),
+                    const SizedBox(height: 70,),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text("Name : ${userModelCurrentInfo!.name!}",
-                          style: GoogleFonts.lato(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            color: darkTheme ? Colors.yellow: Colors.green,
+                        Expanded(
+                          child: Text("Name : ${userModelCurrentInfo!.name!}",
+                            overflow: TextOverflow.ellipsis,
+                            style: GoogleFonts.laila(
+                              fontSize: 22,
+                              color:  Colors.black,
+                            ),
                           ),
                         ),
                         IconButton(
@@ -452,7 +245,8 @@ class _AccountsTabState extends State<AccountsTab> {
                             showUserNameDialogAlert(context, userModelCurrentInfo!.name!);
                           },
                           icon: const Icon(
-                            Icons.edit, color: Colors.green,
+                            Icons.edit, color: Colors.purple,
+                            size: 20,
                           ),
                         ),
                       ],
@@ -462,11 +256,13 @@ class _AccountsTabState extends State<AccountsTab> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text("Phone : ${userModelCurrentInfo!.phone!}",
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            color: darkTheme ? Colors.yellow: Colors.green,
+                        Expanded(
+                          child: Text("Phone : ${userModelCurrentInfo!.phone!}",
+                            overflow: TextOverflow.ellipsis,
+                            style: GoogleFonts.laila(
+                              fontSize: 22,
+                              color:  Colors.black,
+                            ),
                           ),
                         ),
                         IconButton(
@@ -474,7 +270,8 @@ class _AccountsTabState extends State<AccountsTab> {
                             showUserPhoneDialogAlert(context, userModelCurrentInfo!.phone!);
                           },
                           icon: const Icon(
-                            Icons.edit, color: Colors.green,
+                            Icons.edit, color: Colors.purple,
+                            size: 20,
                           ),
                         ),
                       ],
@@ -482,13 +279,16 @@ class _AccountsTabState extends State<AccountsTab> {
                     const Divider(thickness: 0.3,),
                     //Address
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        Text("Address : ${userModelCurrentInfo!.address!}",
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            color: darkTheme ? Colors.yellow: Colors.green,
+                        Expanded(
+                          child: Text("Address : ${userModelCurrentInfo!.address!}",
+                            overflow: TextOverflow.ellipsis,
+                            style: GoogleFonts.laila(
+                              fontSize: 22,
+                              color:  Colors.black,
+                            ),
+                          
                           ),
                         ),
                         IconButton(
@@ -497,127 +297,45 @@ class _AccountsTabState extends State<AccountsTab> {
                             showUserAddressDialogAlert(context, userModelCurrentInfo!.address!);
                           },
                           icon: const Icon(
-                            Icons.edit, color: Colors.green,
-                          ),
-                        ),
-                      ],
-                    ),
-                    const Divider(thickness: 0.3,),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text("Vehicle Type : ${onlineDriverData.vehicleType!.toUpperCase()}",
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            color: darkTheme ? Colors.yellow: Colors.green,
-                          ),
-                        ),  Image.asset(
-                                  onlineDriverData.vehicleType =="car"? "images/car.png"
-                                  : onlineDriverData.vehicleType=="cng" ? "images/cng.png"
-                                  :"images/bike.png",
-                                width: 40,
-                                height: 40,
-                              ),
-
-                        IconButton(
-                          onPressed: (){
-
-                            showVehicleTypeDialogAlert(context, onlineDriverData.vehicleType!);
-                          },
-                          icon: const Icon(
-                            Icons.edit, color: Colors.green,
-                          ),
-                        ),
-                      ],
-                    ),
-                    const Divider(thickness: 0.3,),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text("Vehicle Color : ${onlineDriverData.vehicleColor!}",
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            color: darkTheme ? Colors.yellow: Colors.green,
-                          ),
-                        ),
-                        IconButton(
-                          onPressed: (){
-
-                            showVehicleColorDialogAlert(context, onlineDriverData.vehicleColor!);
-                          },
-                          icon: const Icon(
-                            Icons.edit, color: Colors.green,
-                          ),
-                        ),
-                      ],
-                    ),
-                    const Divider(thickness: 0.3,),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text("Vehicle Model : ${onlineDriverData.vehicleModel!}",
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            color: darkTheme ? Colors.yellow: Colors.green,
-                          ),
-                        ),
-                        IconButton(
-                          onPressed: (){
-
-                            showVehicleModelDialogAlert(context, onlineDriverData.vehicleModel!);
-                          },
-                          icon: const Icon(
-                            Icons.edit, color: Colors.green,
-                          ),
-                        ),
-                      ],
-                    ),
-                    const Divider(thickness: 0.3,),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text("Vehicle Number : ${onlineDriverData.vehicleNumber!}",
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            color: darkTheme ? Colors.yellow: Colors.green,
-                          ),
-                        ),
-                        IconButton(
-                          onPressed: (){
-
-                            showVehicleNumberDialogAlert(context, onlineDriverData.vehicleNumber!);
-                          },
-                          icon: const Icon(
-                            Icons.edit, color: Colors.green,
+                            Icons.edit, color: Colors.purple,
+                            size: 20,
                           ),
                         ),
                       ],
                     ),
                     const Divider(thickness: 0.3,),
                     Text(userModelCurrentInfo!.email!,
-                      style: const TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color:  Colors.green ,
+                      style:  GoogleFonts.laila(
+                        fontSize: 20,
+                        color:  Colors.purple ,
                       ),
                     ),
-
-                    const SizedBox(height: 30,),
+                    const SizedBox(height: 50,),
                     ElevatedButton(
                       onPressed: (){
-                        FirebaseAuth.instance.signOut();
-                        Navigator.push(context, MaterialPageRoute(builder: (c)=>LoginScreen()));
+                        Navigator.push(context, MaterialPageRoute(builder: (c)=>VehicleDetailsUpdateScreen()));
                       },
                         style: ElevatedButton.styleFrom(
                           backgroundColor:  Colors.blue[600],
                         ),
-                      child: Text( "Sign out",
+                      child: Text( "Vehicle Details",
                       style: GoogleFonts.niconne(color: Colors.white, fontSize: 28, fontWeight: FontWeight.bold),
                     ),
+
+                    ),
+                    const SizedBox(height: 60,),
+                    ElevatedButton(
+                      onPressed: (){
+                        FirebaseAuth.instance.signOut();
+                        Navigator.push(context, MaterialPageRoute(builder: (c)=>LoginScreen()));
+
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor:  Colors.blue[600],
+                      ),
+                      child: Text( "Log out",
+                        style: GoogleFonts.niconne(color: Colors.white, fontSize: 28, fontWeight: FontWeight.bold),
+                      ),
 
                     ),
                   ],
