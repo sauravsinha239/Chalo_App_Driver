@@ -1,2 +1,2 @@
 String mapKey="AIzaSyBIMWvKx94ksy6JSwh3XaTE_TcW9XOdl7A";
-String goMapKey="AlzaSyuaVN08xnWiaZcAtokhJy4FwtitnPmz8As";
+String goMapKey="AlzaSyyAG9IXQF65a5_1_MUQ15ldE0KApT8_uUw";

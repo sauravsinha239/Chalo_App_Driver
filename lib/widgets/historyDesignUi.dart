@@ -34,13 +34,13 @@ class _HistoryDesignUiState extends State<HistoryDesignUi> {
           formatDataTime(widget.tripsHistoryModel!.time!),
           style: GoogleFonts.lato(fontSize: 20, fontWeight: FontWeight.bold) ,
         ),
-        SizedBox(height: 10,),
+        const SizedBox(height: 10,),
         Container(
           decoration: BoxDecoration(
             color: darkTheme ? Colors.pink[900]:Colors.purple[400],
             borderRadius: BorderRadius.circular(30),
           ),
-          padding: EdgeInsets.all(15),
+           padding: const EdgeInsets.all(15),
           child: Column(
             children: [
               Row(
@@ -50,7 +50,7 @@ class _HistoryDesignUiState extends State<HistoryDesignUi> {
 
                     children: [
                       Container(
-                        padding: EdgeInsets.all(10),
+                        padding: const EdgeInsets.all(10),
                         decoration: BoxDecoration(
                           color: darkTheme? Colors.black:Colors.blue[400],
                           borderRadius: BorderRadius.circular(15),
@@ -58,7 +58,7 @@ class _HistoryDesignUiState extends State<HistoryDesignUi> {
                         child: Icon(Icons.person, color: Colors.white,),
                       ),
 
-                      SizedBox(width: 15,),
+                     const SizedBox(width: 15,),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -66,7 +66,7 @@ class _HistoryDesignUiState extends State<HistoryDesignUi> {
                           style: GoogleFonts.lato(fontWeight: FontWeight.bold,color: Colors.white),
                           ),
 
-                          SizedBox(height: 8,),
+                          const SizedBox(height: 8,),
                           Row(
                             children: [
                               Icon(Icons.star, color: Colors.orange,),
@@ -102,9 +102,7 @@ class _HistoryDesignUiState extends State<HistoryDesignUi> {
                       Text("status",
                         style: GoogleFonts.lato(color:Colors.white),
                       ),
-
-                      SizedBox(height: 8,),
-
+                      const SizedBox(height: 8,),
 
                       Text(widget.tripsHistoryModel?.status??"NA",
                         style: GoogleFonts.lato(color:Colors.white),
@@ -143,11 +141,11 @@ class _HistoryDesignUiState extends State<HistoryDesignUi> {
                       ),
                       SizedBox(width: 15,),
 
-                      Text("${widget.tripsHistoryModel?.originAddress!.substring(0,40)}.." ?? "Retry", style: GoogleFonts.lato(fontSize: 12,fontWeight: FontWeight.bold,color: Colors.white),
+                      Text(widget.tripsHistoryModel!.originAddress!.length >35 ?
+                          "${
+                          widget.tripsHistoryModel?.originAddress!.substring(0,35) }..":"Unavailable",
+                        style: GoogleFonts.lato(fontSize: 12,fontWeight: FontWeight.bold,color: Colors.white),
                       ),
-
-
-
                     ],
                   ),
 
@@ -180,11 +178,7 @@ class _HistoryDesignUiState extends State<HistoryDesignUi> {
 
             ],
           ),
-
-
-
-
-        )
+        ),
       ],
     );
   }

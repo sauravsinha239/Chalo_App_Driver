@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -13,10 +14,12 @@ class EarningTab extends StatefulWidget{
 }
 
 class _EarningTabState extends State<EarningTab> {
+
   @override
   Widget build(BuildContext context) {
 
     bool darkTheme= MediaQuery.of(context).platformBrightness == Brightness.dark;
+
 
     return Container(
       color: darkTheme ? Colors.lightBlue[700] : Colors.lightBlue[100],
@@ -32,14 +35,14 @@ class _EarningTabState extends State<EarningTab> {
                   Text("Your Earnings",
                     style: GoogleFonts.niconne(color: darkTheme? Colors.green: Colors.red,
                       fontWeight: FontWeight.bold,
-                      fontSize: 38,
+                      fontSize: 48,
                     ),
                   ),
                   Text(
-                    "₹${Provider.of<AppInfo>(context, listen: false).driverTotalEarnings}",
+                    "₹${double.parse(Provider.of<AppInfo>(context, listen: false).driverTotalEarnings).toStringAsFixed(2)}",
                     style: GoogleFonts.lato(
                       color: darkTheme? Colors.blue[500]: Colors.orange[600],
-                      fontSize: 50,
+                      fontSize: 40,
                       fontWeight: FontWeight.bold,
                     ),
 

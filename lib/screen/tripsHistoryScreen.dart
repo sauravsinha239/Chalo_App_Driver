@@ -16,6 +16,7 @@ class TripsHistoryScreen extends StatefulWidget{
 class _TripsHistoryScreenState extends State<TripsHistoryScreen> {
   @override
   Widget build(BuildContext context) {
+    
   bool darkTheme= MediaQuery.of(context).platformBrightness == Brightness.dark;
   return Scaffold(
     backgroundColor: darkTheme ? Colors.lightBlue[700]: Colors.lightBlue[100],
