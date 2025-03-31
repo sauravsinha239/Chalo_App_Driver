@@ -1,9 +1,11 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:drivers/TabPage/AccountsTab.dart';
 import 'package:drivers/TabPage/EarningTab.dart';
 import 'package:drivers/TabPage/HomeTab.dart';
 import 'package:drivers/TabPage/RatingTab.dart';
+import 'package:drivers/global/map_key.dart';
 import 'package:drivers/widgets/getDriverData.dart';
 import 'package:flutter/material.dart';
 class MainPage extends StatefulWidget{
@@ -30,6 +32,8 @@ GetDriverData getDriverData  =GetDriverData();
 
     tabController = TabController(length: 4, vsync: this);
     getDriverData.readCurrentDriverInformation();
+
+    getMapKey();
 
   }
 

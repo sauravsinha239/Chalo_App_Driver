@@ -1,2 +1,9 @@
+import 'package:drivers/Assistants/FeatchApiKey.dart';
+
 String mapKey="AIzaSyBIMWvKx94ksy6JSwh3XaTE_TcW9XOdl7A";
-String goMapKey="AlzaSyyAG9IXQF65a5_1_MUQ15ldE0KApT8_uUw";
+String goMapKey="";
+
+
+void getMapKey()async {
+   goMapKey = await MapConfig.getMapsApiKey();
+}
