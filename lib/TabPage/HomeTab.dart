@@ -172,7 +172,7 @@ GetDriverData gdd =GetDriverData();
      ],
    );
   }
-//Driver id online now methods
+// Driver id online now methods
   driverIsOnlineNow()async{
     Position pos = await Geolocator.getCurrentPosition(
       desiredAccuracy: LocationAccuracy.high,
@@ -181,15 +181,37 @@ GetDriverData gdd =GetDriverData();
 
     driverCurrentPosition = pos;
     Geofire.initialize("activeDrivers");
-    Geofire.setLocation(currentUser!.uid, driverCurrentPosition!.latitude, driverCurrentPosition!.longitude);
+
+    DatabaseReference refs = FirebaseDatabase.instance
+        .ref()
+        .child("activeDrivers")
+        .child(currentUser!.uid);
+    await refs.update({
+      "Latitude": pos.latitude,
+      "Longitude": pos.longitude
+    });
+
     DatabaseReference ref = FirebaseDatabase.instance.ref().child("drivers").child(currentUser!.uid).child("newRideStatus");
     ref.set("idle");
     ref.onValue.listen((event){});
   }
+
   updateDriverLocationAtRealTime(){
-  streamSubscriptionPosition  = Geolocator.getPositionStream().listen((Position position){
+  streamSubscriptionPosition  = Geolocator.getPositionStream().listen((Position position) async {
+    Position pos = await Geolocator.getCurrentPosition(
+      desiredAccuracy: LocationAccuracy.high,
+
+    );
     if(isDriverActive== true){
-      Geofire.setLocation(currentUser!.uid, driverCurrentPosition!.latitude, driverCurrentPosition!.longitude);
+    DatabaseReference ref = FirebaseDatabase.instance
+        .ref()
+        .child("activeDrivers")
+        .child(currentUser!.uid);
+
+    await ref.update({
+      "Latitude": pos.latitude,
+      "Longitude": pos.longitude
+    });
     }
     LatLng latLng = LatLng(driverCurrentPosition!.latitude, driverCurrentPosition!.longitude);
     newGoogleMapController!.animateCamera(CameraUpdate.newLatLng(latLng));
@@ -197,12 +219,13 @@ GetDriverData gdd =GetDriverData();
   }
 
 
+
   driverOfflineNow(){
     Geofire.removeLocation(currentUser!.uid);
     DatabaseReference? ref=FirebaseDatabase.instance.ref().child("drivers").child(currentUser!.uid).child("newRideStatus");
     ref.onDisconnect();
     ref.remove();
-    ref =null;
+     ref =null;
     Future.delayed(const Duration(microseconds: 8000),(){
       Navigator.push(context, MaterialPageRoute(builder: (c)=> Splash()));
 
